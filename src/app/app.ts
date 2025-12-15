@@ -9,7 +9,6 @@ import { HomeComponent } from './pages/home/home';
 import { LoginComponent } from './pages/login/login';
 import { RegisterComponent } from './pages/register/register';
 import { AccountComponent } from './pages/account/account';
-import { SeatSelectionComponent } from './pages/seat-selection/seat-selection';
 import { MovieDetailComponent } from './pages/movie-detail/movie-detail';
 
 @Component({
@@ -24,7 +23,6 @@ import { MovieDetailComponent } from './pages/movie-detail/movie-detail';
     LoginComponent,
     AccountComponent,
     RegisterComponent,
-    SeatSelectionComponent,
     MovieDetailComponent
   ],
   templateUrl: './app.html',
