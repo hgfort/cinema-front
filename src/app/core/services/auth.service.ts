@@ -23,44 +23,44 @@ export class AuthService {
 
   // Вход
   login(credentials: UserLoginDto): Observable<any> {
-        const mockUser = {
-userId: 1,
-    name: 'Тестовый',
-    surname: 'Пользователь', // ← добавить
-    email: credentials.email,
-    birthDate: '1990-01-01', // ← добавить
-    age: 30, // ← добавить
-    registrationDate: new Date().toISOString().split('T')[0], // ← добавить
-    role: 'user'
-    };
+//         const mockUser = {
+// userId: 1,
+//     name: 'Тестовый',
+//     surname: 'Пользователь', // ← добавить
+//     email: credentials.email,
+//     birthDate: '1990-01-01', // ← добавить
+//     age: 30, // ← добавить
+//     registrationDate: new Date().toISOString().split('T')[0], // ← добавить
+//     role: 'admin'
+//     };
     
-    localStorage.setItem('currentUser', JSON.stringify(mockUser));
-    localStorage.setItem('token', 'mock-jwt-token');
-    this.currentUserSubject.next(mockUser);
+//     localStorage.setItem('currentUser', JSON.stringify(mockUser));
+//     localStorage.setItem('token', 'mock-jwt-token');
+//     this.currentUserSubject.next(mockUser);
     
-    return of({ success: true, user: mockUser });
-    // return new Observable(observer => {
-    //   this.api.post('auth/login', credentials).subscribe({
-    //     next: (response: any) => {
-    //       const user: UserDto = response.user; // Предполагаем, что бэкенд возвращает user и token
-    //       const token = response.token;
+//     return of({ success: true, user: mockUser });
+    return new Observable(observer => {
+      this.api.post('auth/login', credentials).subscribe({
+        next: (response: any) => {
+          const user: UserDto = response.user; // Предполагаем, что бэкенд возвращает user и token
+          const token = response.token;
           
-    //       localStorage.setItem('currentUser', JSON.stringify(user));
-    //       localStorage.setItem('token', token);
-    //       this.currentUserSubject.next(user);
+          localStorage.setItem('currentUser', JSON.stringify(user));
+          localStorage.setItem('token', token);
+          this.currentUserSubject.next(user);
           
-    //       observer.next(response);
-    //       observer.complete();
-    //     },
-    //     error: (error) => observer.error(error)
-    //   });
-    // });
+          observer.next(response);
+          observer.complete();
+        },
+        error: (error) => observer.error(error)
+      });
+    });
   }
 
   // Регистрация
   register(userData: UserRegisterDto): Observable<any> {
-     return of({ success: true, message: 'Регистрация успешна' });
-    // return this.api.post('auth/register', userData);
+    //  return of({ success: true, message: 'Регистрация успешна' });
+    return this.api.post('auth/register', userData);
   }
 
   // Выход
@@ -92,3 +92,4 @@ userId: 1,
     return localStorage.getItem('token');
   }
 }
+
