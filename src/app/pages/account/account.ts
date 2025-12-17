@@ -220,7 +220,7 @@ import { UserDto, BookingDto } from '../../shared/models';
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './account.html',
-  styleUrls: ['./account.css'] // создайте этот файл
+  styleUrls: ['./account.css'] 
 })
 export class AccountComponent implements OnInit, OnDestroy {
   user: UserDto | null = null;
