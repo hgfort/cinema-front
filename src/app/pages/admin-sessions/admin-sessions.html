@@ -1,0 +1,137 @@
+<!-- admin-sessions.html -->
+<main class="container admin-sessions">
+  <header class="page-header">
+    <h1>Управление сеансами</h1>
+    <div class="header-actions">
+      <button class="btn btn-icon" (click)="refreshSessions()" title="Обновить">
+        <span class="icon">↻</span>
+      </button>
+    </div>
+  </header>
+
+  <div class="admin-actions">
+    <a 
+      [routerLink]="filmId ? ['/admin/sessions/add', filmId] : '/admin/sessions/add'" 
+      class="btn btn-primary"
+    >
+      <span class="icon">+</span> Добавить сеанс
+    </a>
+    
+    <div class="filters">
+      <div class="filter-group">
+        <label>Быстрые фильтры:</label>
+        <div class="filter-buttons">
+          <button 
+            class="filter-btn" 
+            [class.active]="filterMode==='today'" 
+            (click)="setFilter('today')"
+          >
+            Сегодня
+          </button>
+          <button 
+            class="filter-btn" 
+            [class.active]="filterMode==='week'" 
+            (click)="setFilter('week')"
+          >
+            На неделю
+          </button>
+          <button 
+            class="filter-btn" 
+            [class.active]="filterMode==='all'" 
+            (click)="setFilter('all')"
+          >
+            Все
+          </button>
+        </div>
+      </div>
+      
+      <div class="filter-group">
+        <label>Статус:</label>
+        <select class="form-select" [(ngModel)]="statusFilter" (ngModelChange)="onStatusFilterChange()">
+          <option value="">Все статусы</option>
+          <option value="active">Активный</option>
+          <option value="cancelled">Отменен</option>
+          <option value="completed">Завершен</option>
+        </select>
+      </div>
+      
+      <div class="filter-group">
+        <label>Дата:</label>
+        <input 
+          type="date" 
+          class="form-input" 
+          [(ngModel)]="dateFilter"
+          (ngModelChange)="onDateFilterChange()"
+        />
+      </div>
+      
+      <button class="btn btn-outline" (click)="clearFilters()">
+        Сбросить фильтры
+      </button>
+    </div>
+  </div>
+
+  <!-- Состояние загрузки -->
+  <div *ngIf="isLoading" class="loading-state">
+    <div class="spinner"></div>
+    <p>Загрузка сеансов...</p>
+  </div>
+
+  <!-- Сообщение об ошибке -->
+  <div *ngIf="errorMessage && !isLoading" class="error-state">
+    <p class="error-message">{{ errorMessage }}</p>
+    <button class="btn btn-outline" (click)="loadSessions()">Повторить попытку</button>
+  </div>
+
+  <!-- Список сеансов -->
+  <section class="sessions-list" *ngIf="!isLoading && !errorMessage">
+    <div *ngIf="filteredSessions.length === 0" class="empty-state">
+      <p class="empty-text">Сеансы не найдены</p>
+      <p *ngIf="filmId" class="empty-subtext">
+        У этого фильма пока нет сеансов. 
+        <a [routerLink]="['/admin/sessions/add', filmId]">Добавить первый сеанс</a>
+      </p>
+    </div>
+
+    <div *ngFor="let session of filteredSessions" class="session-card">
+      <div class="session-header">
+        <div class="session-id">Сеанс #{{ session.sessionId }}</div>
+        <div class="session-status" [class]="'status-' + session.status">
+          {{ getStatusText(session.status) }}
+        </div>
+      </div>
+      
+      <div class="session-body">
+        <div class="session-info">
+          <div class="info-item">
+            <span class="info-label">Дата и время:</span>
+            <span class="info-value">{{ formatDateTime(session.dateTime) }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Фильм:</span>
+            <span class="info-value">{{ session.filmTitle }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Зал:</span>
+            <span class="info-value">{{ session.hallName }}</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="session-actions">
+        <button 
+          class="btn btn-primary" 
+          (click)="editSession(session.sessionId)"
+        >
+          <span class="icon">✏️</span> Редактировать
+        </button>
+        <button 
+          class="btn btn-danger" 
+          (click)="deleteSession(session.sessionId)"
+        >
+          <span class="icon">🗑️</span> Удалить
+        </button>
+      </div>
+    </div>
+  </section>
+</main>

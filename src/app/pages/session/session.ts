@@ -420,7 +420,7 @@ export class SessionComponent implements OnInit {
     let seatId = 1;
     const seats: SeatUI[] = [];
     
-    for (let row = 1; row <= this.hall.rows_count; row++) {
+    for (let row = 1; row <= this.hall.rowsCount; row++) {
       for (let seatNum = 1; seatNum <= this.hall.seatsPerRow; seatNum++) {
         const isVip = (row === 3 || row === 4) && (seatNum >= 4 && seatNum <= 8);
         
@@ -456,7 +456,7 @@ export class SessionComponent implements OnInit {
 
   getRows(): number[] {
     if (!this.hall) return [];
-    return Array.from({length: this.hall.rows_count}, (_, i) => i + 1);
+    return Array.from({length: this.hall.rowsCount}, (_, i) => i + 1);
   }
 
   selectSeat(seatUI: SeatUI): void {

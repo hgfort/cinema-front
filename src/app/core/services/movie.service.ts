@@ -91,10 +91,9 @@ export class MovieService {
   }
 
   // Создать фильм (админ)
-  createMovie(movie: FormData): Observable<FilmDto> {
+  createMovie(movie: any): Observable<FilmDto> {
     return this.api.post<FilmDto>('films', movie);
   }
-
   // Обновить фильм (админ)
   updateMovie(id: number, movie: FilmDto): Observable<FilmDto> {
     return this.api.put<FilmDto>(`films/${id}`, movie);
