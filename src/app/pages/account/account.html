@@ -100,7 +100,7 @@
                           <a class="btn btn-sm" [routerLink]="['/booking', booking.bookingId, 'ticket']">
                             Посмотреть билет
                           </a>
-                          @if (canCancelBooking(booking)) {
+                          @if (canCancelBooking(booking) ) {
                             <button 
                               class="btn btn-sm btn-outline" 
                               (click)="cancelBooking(booking.bookingId)">

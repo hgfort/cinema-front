@@ -482,7 +482,8 @@ transformSeatsToLayout(seats: SeatDto[]): void {
           seatNumber: seat.seatNumber,
           seatType: seat.seatType,
           priceMultiplier: seat.priceMultiplier || (seat.seatType === 'vip' ? 1.5 : 1.0),
-          hallId: seat.hallId || this.selectedHallId || 0
+          hallId: seat.hallId || this.selectedHallId || 0,
+          status: seat.status
         });
       } else {
         // Создаем новое место (seatId = 0)
@@ -492,7 +493,8 @@ transformSeatsToLayout(seats: SeatDto[]): void {
           seatNumber: s,
           seatType: 'standard',
           priceMultiplier: 1.0,
-          hallId: this.selectedHallId || 0
+          hallId: this.selectedHallId || 0,
+          status: 'AVALIBLE'
         });
       }
     }
@@ -512,7 +514,8 @@ transformSeatsToLayout(seats: SeatDto[]): void {
           seatNumber: s,
           seatType: 'standard',
           priceMultiplier: 1.0,
-          hallId: this.selectedHallId || 0
+          hallId: this.selectedHallId || 0,
+          status: 'AVALIBLE'
         });
       }
       this.layout.push(row);

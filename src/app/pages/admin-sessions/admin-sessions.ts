@@ -30,6 +30,8 @@ export class AdminSessions implements OnInit {
   // Фильтры
   dateFilter: string = '';
   statusFilter: string = '';
+  filmNameFilter: string = '';
+  hallNameFilter: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -142,11 +144,13 @@ export class AdminSessions implements OnInit {
       return {
         ...session,
         filmTitle: film?.title || `Фильм #${session.filmId}`,
-        hallName: hall?.hallName || `Зал #${session.hallId}`
+        hallName: hall?.hallName || `Зал #${session.hallId}`,
+        filmData: film,
+        hallData: hall
       };
     });
     
-    // Фильтр по дате
+    // Фильтр по дате (быстрые фильтры)
     if (this.filterMode === 'today') {
       const today = new Date().toISOString().split('T')[0];
       result = result.filter(s => s.dateTime.split('T')[0] === today);
@@ -170,6 +174,24 @@ export class AdminSessions implements OnInit {
       result = result.filter(s => s.dateTime.split('T')[0] === this.dateFilter);
     }
     
+    // Фильтр по названию фильма
+    if (this.filmNameFilter) {
+      const searchTerm = this.filmNameFilter.toLowerCase().trim();
+      result = result.filter(s => {
+        const filmTitle = s.filmTitle.toLowerCase();
+        return filmTitle.includes(searchTerm);
+      });
+    }
+    
+    // Фильтр по названию зала
+    if (this.hallNameFilter) {
+      const searchTerm = this.hallNameFilter.toLowerCase().trim();
+      result = result.filter(s => {
+        const hallName = s.hallName.toLowerCase();
+        return hallName.includes(searchTerm);
+      });
+    }
+    
     this.filteredSessions = result;
   }
 
@@ -183,6 +205,14 @@ export class AdminSessions implements OnInit {
   }
 
   onDateFilterChange() {
+    this.applyFilters();
+  }
+
+  onFilmNameFilterChange() {
+    this.applyFilters();
+  }
+
+  onHallNameFilterChange() {
     this.applyFilters();
   }
 
@@ -209,6 +239,9 @@ export class AdminSessions implements OnInit {
   }
 
   refreshSessions() {
+    // Очищаем кэш при обновлении
+    this.filmsCache.clear();
+    this.hallsCache.clear();
     this.loadSessions();
   }
 
@@ -216,6 +249,8 @@ export class AdminSessions implements OnInit {
     this.filterMode = 'all';
     this.statusFilter = '';
     this.dateFilter = '';
+    this.filmNameFilter = '';
+    this.hallNameFilter = '';
     this.applyFilters();
   }
 

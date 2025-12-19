@@ -2,7 +2,8 @@
 import { Injectable } from '@angular/core';
 import { Observable,of } from 'rxjs';
 import { ApiService } from './api.service';
-import { FilmDto } from '../../shared/models';
+import { DirectorDto, FilmDto } from '../../shared/models';
+import { FilmInfoListDto } from '../../shared/models';
 
 @Injectable({
   providedIn: 'root'
@@ -77,6 +78,14 @@ export class MovieService {
   getAllMovies(): Observable<FilmDto[]> {
     // return of(this.mockMovies);
      return this.api.get<FilmDto[]>('films');
+  }
+
+  getCountriesAndDirectors(): Observable<FilmInfoListDto>{
+    return this.api.get<FilmInfoListDto>('films/info')
+  }
+
+  createDirector(director: any): Observable<DirectorDto>{
+    return this.api.post<DirectorDto>('films/director', director);
   }
 
   getMovieById(id: number): Observable<FilmDto | undefined> {

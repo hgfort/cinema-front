@@ -1,4 +1,4 @@
-/* admin-sessions.html (обновленные стили) */
+/* admin-sessions.css (дополнения) */
 .admin-sessions {
   padding: 2rem;
 }
@@ -56,10 +56,9 @@
 }
 
 .filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.5rem;
-  align-items: flex-end;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
 }
 
 .filter-group {
@@ -77,6 +76,7 @@
 .filter-buttons {
   display: flex;
   gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .filter-btn {
@@ -86,6 +86,7 @@
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s;
+  font-size: 0.875rem;
 }
 
 .filter-btn:hover {
@@ -102,7 +103,20 @@
   padding: 0.5rem;
   border: 1px solid #ddd;
   border-radius: 4px;
-  min-width: 150px;
+  font-size: 0.9rem;
+}
+
+.form-input {
+  width: 100%;
+}
+
+.stats {
+  background: #e8f4ff;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  color: #333;
 }
 
 .loading-state {
@@ -148,16 +162,59 @@
 
 .empty-text {
   font-size: 1.2rem;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.empty-suggestions {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 1.5rem auto;
+  max-width: 400px;
+  text-align: left;
+}
+
+.empty-suggestions p {
   margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.empty-suggestions ul {
+  margin: 0;
+  padding-left: 1.5rem;
+}
+
+.empty-suggestions li {
+  margin-bottom: 0.25rem;
+}
+
+.btn-link {
+  background: none;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  font-size: inherit;
+}
+
+.btn-link:hover {
+  color: #0056b3;
 }
 
 .empty-subtext {
   color: #999;
+  margin-top: 1rem;
 }
 
 .empty-subtext a {
   color: #007bff;
   text-decoration: none;
+}
+
+.empty-subtext a:hover {
+  text-decoration: underline;
 }
 
 .sessions-list {
@@ -233,10 +290,12 @@
   font-weight: 500;
   color: #666;
   min-width: 120px;
+  font-size: 0.9rem;
 }
 
 .info-value {
   color: #333;
+  font-size: 0.95rem;
 }
 
 .session-actions {
@@ -308,12 +367,7 @@
   }
   
   .filters {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  
-  .filter-group {
-    width: 100%;
+    grid-template-columns: 1fr;
   }
   
   .session-actions {

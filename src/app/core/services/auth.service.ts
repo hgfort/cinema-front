@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { ApiService } from './api.service';
 import { UserLoginDto, UserRegisterDto, UserDto } from '../../shared/models';
+import { getCurrentInjector } from '@angular/core/primitives/di';
 
 
 @Injectable({

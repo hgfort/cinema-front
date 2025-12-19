@@ -214,6 +214,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { AuthService } from '../../core/services/auth.service';
 import { BookingService } from '../../core/services/booking.service';
 import { UserDto, BookingDto } from '../../shared/models';
+import { SessionService } from '../../core/services/session.service';
 
 @Component({
   selector: 'app-account',
@@ -233,6 +234,7 @@ export class AccountComponent implements OnInit, OnDestroy {
   constructor(
     private auth: AuthService,
     private bookingService: BookingService,
+    private sessionService: SessionService,
     private router: Router
   ) {}
 
@@ -263,7 +265,6 @@ export class AccountComponent implements OnInit, OnDestroy {
       this.isLoading = false;
       return;
     }
-
     this.bookingService.getUserBookings(this.user.userId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
@@ -317,13 +318,20 @@ export class AccountComponent implements OnInit, OnDestroy {
     }
   }
 
-  canCancelBooking(booking: BookingDto): boolean {
+
+  
+canCancelBooking(booking: BookingDto): boolean {
     if (booking.status !== 'active') return false;
-    
-    const bookingTime = new Date(booking.bookingTime);
     const now = new Date();
-    const hoursDiff = (bookingTime.getTime() - now.getTime()) / (1000 * 60 * 60);
-    return hoursDiff > 1; // Можно отменить за 1 час до сеанса
+    let flag: boolean = false;
+    this.sessionService.getSessionById(booking.sessionId).subscribe({
+      next: (session:any) => {
+        const sessionTime = new Date(session.dateTime)
+        const hoursDiff = (sessionTime.getTime() - now.getTime()) / (1000 * 60 * 60);
+        flag = hoursDiff > 1;
+      }
+    });
+    return true;
   }
 
   getBookingStatusText(status: string): string {

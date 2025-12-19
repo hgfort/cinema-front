@@ -1,14 +1,18 @@
+import { FilmDto } from "./film.model";
+
 export interface CountryDto {
     countryId: number;
-    name: string;
+    countryName: string;
+    directorList: DirectorDto[];
+    filmList: FilmDto[];
 }
 
 export interface DirectorDto {
     directorId: number;
-    name: string;
-    surname: string;
-    birthDate: string; // или Date если будешь парсить
-    country: CountryDto;
+    directorNameAndSurname: string;
+    birthDate: string;
+    countryId: number;
+    filmList: FilmDto[];
 }
 
 export interface FilmInfoListDto {

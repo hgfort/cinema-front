@@ -18,6 +18,7 @@
     </a>
     
     <div class="filters">
+      <!-- Быстрые фильтры -->
       <div class="filter-group">
         <label>Быстрые фильтры:</label>
         <div class="filter-buttons">
@@ -45,6 +46,31 @@
         </div>
       </div>
       
+      <!-- Фильтр по названию фильма -->
+      <div class="filter-group">
+        <label>Фильм:</label>
+        <input 
+          type="text" 
+          class="form-input" 
+          [(ngModel)]="filmNameFilter"
+          (ngModelChange)="onFilmNameFilterChange()"
+          placeholder="Введите название фильма..."
+        />
+      </div>
+      
+      <!-- Фильтр по названию зала -->
+      <div class="filter-group">
+        <label>Зал:</label>
+        <input 
+          type="text" 
+          class="form-input" 
+          [(ngModel)]="hallNameFilter"
+          (ngModelChange)="onHallNameFilterChange()"
+          placeholder="Введите название зала..."
+        />
+      </div>
+      
+      <!-- Фильтр по статусу -->
       <div class="filter-group">
         <label>Статус:</label>
         <select class="form-select" [(ngModel)]="statusFilter" (ngModelChange)="onStatusFilterChange()">
@@ -55,6 +81,7 @@
         </select>
       </div>
       
+      <!-- Фильтр по дате -->
       <div class="filter-group">
         <label>Дата:</label>
         <input 
@@ -65,6 +92,7 @@
         />
       </div>
       
+      <!-- Сброс фильтров -->
       <button class="btn btn-outline" (click)="clearFilters()">
         Сбросить фильтры
       </button>
@@ -83,11 +111,26 @@
     <button class="btn btn-outline" (click)="loadSessions()">Повторить попытку</button>
   </div>
 
+  <!-- Статистика -->
+  <div *ngIf="!isLoading && !errorMessage && filteredSessions.length > 0" class="stats">
+    <p>Найдено сеансов: <strong>{{ filteredSessions.length }}</strong></p>
+  </div>
+
   <!-- Список сеансов -->
   <section class="sessions-list" *ngIf="!isLoading && !errorMessage">
     <div *ngIf="filteredSessions.length === 0" class="empty-state">
       <p class="empty-text">Сеансы не найдены</p>
-      <p *ngIf="filmId" class="empty-subtext">
+      <div *ngIf="filmNameFilter || hallNameFilter || dateFilter || statusFilter || filterMode !== 'all'" 
+           class="empty-suggestions">
+        <p>Попробуйте:</p>
+        <ul>
+          <li *ngIf="filmNameFilter">Изменить поисковый запрос для фильма</li>
+          <li *ngIf="hallNameFilter">Изменить поисковый запрос для зала</li>
+          <li>Изменить фильтры</li>
+          <li><button class="btn-link" (click)="clearFilters()">Сбросить все фильтры</button></li>
+        </ul>
+      </div>
+      <p *ngIf="filmId && !filmNameFilter" class="empty-subtext">
         У этого фильма пока нет сеансов. 
         <a [routerLink]="['/admin/sessions/add', filmId]">Добавить первый сеанс</a>
       </p>
@@ -114,6 +157,14 @@
           <div class="info-item">
             <span class="info-label">Зал:</span>
             <span class="info-value">{{ session.hallName }}</span>
+          </div>
+          <div class="info-item" *ngIf="session.filmData?.duration">
+            <span class="info-label">Длительность:</span>
+            <span class="info-value">{{ session.filmData.duration }} мин.</span>
+          </div>
+          <div class="info-item" *ngIf="session.hallData?.hallType">
+            <span class="info-label">Тип зала:</span>
+            <span class="info-value">{{ session.hallData.hallType }}</span>
           </div>
         </div>
       </div>
